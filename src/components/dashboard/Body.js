@@ -9,7 +9,7 @@ function Body() {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        const retrieveData = async () => {
+        async function retrieveData() {
             const data = await retrieveBasicUserData();
             setUserData(data);
             console.log("retrieved user data:", data)

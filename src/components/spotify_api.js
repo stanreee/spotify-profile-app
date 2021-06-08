@@ -9,7 +9,7 @@ const headers = {
 }
 
 function buildURL(path) {
-  return api_url + path + "?access_token=" + localStorage.getItem("access-token") + "&refresh_token=" + localStorage.getItem("refresh_token") + "&expired=" + isTokenExpired();
+  return api_url + path + "?access_token=" + localStorage.getItem("access-token") + "&refresh_token=" + localStorage.getItem("refresh-token") + "&expired=" + isTokenExpired();
 }
 
 function isTokenExpired() {
@@ -19,30 +19,32 @@ function isTokenExpired() {
 }
 
 function handleData(data) {
+  var handledData = data.data;
   if(isTokenExpired()) {
     localStorage.setItem("access-token", data.refreshed_token);
+    localStorage.setItem("timestamp", Date.now());
   }
-  return data;
+  return handledData;
 }
 
 export const retrieveBasicUserData = async () => {
-  const expired = isTokenExpired();
 
-  const url = api_url + "/api/user-info?access_token=" + localStorage.getItem("access-token") + "&refresh_token=" + localStorage.getItem("refresh-token") + "&expired=" + expired;
+  const url = buildURL("/api/user-info");
 
   console.log(url);
 
-  await fetch(url)
-  .then(response => {
-    response.json().then(data => {
-      console.log(data);
-      const handledData = handleData(data);
-      return handledData;
-    })
-  }).catch(error => {
+  var handledData = null;
+
+  const response = await fetch(url)
+  .catch(error => {
     console.log(error);
     handleErrors(error);
   })
+
+  const data = await response.json();
+  handledData = handleData(data);
+
+  return handledData;
 }
 
 export const retrieveFollowingData = async () => {

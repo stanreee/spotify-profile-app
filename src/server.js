@@ -49,19 +49,15 @@ app.get('/api/user-info', async (req, res) => {
 
     var accessToken = queryObject.access_token;
 
+    console.log("old access token: " + accessToken);
+
     if(queryObject.expired === 'true') {
+        console.log(queryObject.refresh_token);
+        // for some reason \/ this is assigning accessToken to be undefined, even though it's actually returning something
         accessToken = await refreshAccessToken(queryObject.refresh_token);
     }
 
-    // if(isTokenExpired()) {
-    //     await refreshAccessToken();
-    // }
-
-    // const options = {
-    //     method: 'GET',
-    //     url: api_url + "/v1/me",
-    //     headers: headers
-    // }
+    console.log("new access token: " + accessToken);
 
     axios({
         method: "GET",
@@ -76,27 +72,32 @@ app.get('/api/user-info', async (req, res) => {
             data, 
             "refreshed_token": accessToken
         };
+        console.log(responseData);
         res.send(responseData);
     }).catch((error) => {
         res.send("error");
-        console.log(error);
+        console.log(error.response.status);
     })
 })
 
 async function refreshAccessToken(refreshToken) {
-    axios({
+    console.log("given refresh token: " + refreshToken);
+    var accessTokenRefreshed = null;
+    await axios({
         method: "POST",
-        url: "https://accounts.spotify.com/api/token?grant_type=refresh_token&refresh_token=" + process.env.refreshToken + "&client_id=" + process.env.client_id,
+        url: "https://accounts.spotify.com/api/token?grant_type=refresh_token&refresh_token=" + refreshToken + "&client_id=" + process.env.client_id,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': `Basic ${new Buffer.from(`${process.env.client_id}:${process.env.client_secret}`).toString('base64')}`
         },
     }).then(response => {
-        console.log("refreshed access token. receieved data: " + response.data);
-        return response.data.access_token;
+        accessTokenRefreshed = response.data.access_token;
+        console.log("refreshed access token. receieved data: " + accessTokenRefreshed);
+        return accessTokenRefreshed;
     }).catch(error => {
-        console.log(error);
+        console.log(error.response.status);
     })
+    return accessTokenRefreshed;
 }
 
 function isTokenExpired() {
