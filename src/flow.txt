@@ -1,0 +1,18 @@
+in App.js, check if token exists (was exported in another file)
+
+if not, send to login page
+if it does exist, send to dashboard
+
+
+
+TOKEN  HANDLING
+
+when token is received and given to backend of app, send it to the frontend and
+store it in local storage
+
+when making requests, send token to backend of app, then have backend make
+requests to the spotify api given the token, then send the data received
+from spotify to frontend
+
+    right before making requests, check to see if the token is expired (with
+    time stamps), if it is expired, refresh the token
