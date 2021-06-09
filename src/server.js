@@ -26,59 +26,26 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get('/login', (req, res) => {
-    const SCOPE = 'user-read-private user-read-email';
-    res.redirect('https://accounts.spotify.com/authorize' +
-    '?response_type=code' +
-    '&client_id=' + process.env.client_id +
-    '&scope=' + encodeURIComponent(SCOPE) + 
-    '&redirect_uri=' + encodeURIComponent(process.env.redirect_uri))
-});
+function handleResponseData(response, accessToken) {
+    const data = response.data;
+    const responseData = {
+        data,
+        "refreshed_token": accessToken
+    };
+    return responseData;
+}
 
-app.get('/', (req, res) => {
-    if(req.query.code) {
-        handleCodeAuthorization(req, res);
-        return;
-    }
-});
-
-const api_url = "https://api.spotify.com"
-
-app.get('/api/user-info', async (req, res) => {
+async function getToken(req) {
     const queryObject = url.parse(req.url, true).query;
 
     var accessToken = queryObject.access_token;
 
-    console.log("old access token: " + accessToken);
-
     if(queryObject.expired === 'true') {
         console.log(queryObject.refresh_token);
-        // for some reason \/ this is assigning accessToken to be undefined, even though it's actually returning something
         accessToken = await refreshAccessToken(queryObject.refresh_token);
     }
-
-    console.log("new access token: " + accessToken);
-
-    axios({
-        method: "GET",
-        url: "https://api.spotify.com/v1/me",
-        headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-        }
-    }).then((response) => {
-        const data = response.data;
-        const responseData = {
-            data, 
-            "refreshed_token": accessToken
-        };
-        console.log(responseData);
-        res.send(responseData);
-    }).catch((error) => {
-        res.send("error");
-        console.log(error.response.status);
-    })
-})
+    return accessToken;
+}
 
 async function refreshAccessToken(refreshToken) {
     console.log("given refresh token: " + refreshToken);
@@ -100,10 +67,6 @@ async function refreshAccessToken(refreshToken) {
     return accessTokenRefreshed;
 }
 
-function isTokenExpired() {
-    return (Date.now() - process.env.timestamp) > 3600000;
-}
-
 function handleCodeAuthorization(req, res) {
     axios({
         method: 'post',
@@ -114,19 +77,6 @@ function handleCodeAuthorization(req, res) {
         }
     }).then((response) => {
         console.log(`statusCode: ${response.statusCode}`);
-        
-        // const data = response.data;
-        // const access_token = data.access_token;
-        // const refresh_token = data.refresh_token;
-        // process.env.accessToken = access_token;
-        // process.env.refreshToken = refresh_token;
-
-        // process.env.timestamp = Date.timestamp;
-
-        // headers = {
-        //     'Authorization': `Bearer ${process.env.accessToken}`,
-        //     'Content-Type': 'application/json'
-        // }
 
         const data = response.data;
 
@@ -143,5 +93,82 @@ function handleCodeAuthorization(req, res) {
         console.log(error);
     })
 }
+
+app.get('/login', (req, res) => {
+    const SCOPE = 'user-read-private user-read-email';
+    res.redirect('https://accounts.spotify.com/authorize' +
+    '?response_type=code' +
+    '&client_id=' + process.env.client_id +
+    '&scope=' + encodeURIComponent(SCOPE) + 
+    '&redirect_uri=' + encodeURIComponent(process.env.redirect_uri))
+});
+
+app.get('/', (req, res) => {
+    if(req.query.code) {
+        handleCodeAuthorization(req, res);
+        return;
+    }
+});
+
+app.get('/api/user-playlists', async (req, res) => {
+    const accessToken = await getToken(req);
+
+    axios({
+        method: "GET",
+        url: "https://api.spotify.com/v1/me/playlists",
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        }
+    }).then((response) => {
+        const responseData = handleResponseData(response, accessToken);
+        res.send(responseData);
+    }).catch((error) => {
+        res.send("error");
+        console.log(error.response.status);
+    })
+})
+
+app.get('/api/user-info', async (req, res) => {
+    const accessToken = await getToken(req);
+
+    axios({
+        method: "GET",
+        url: "https://api.spotify.com/v1/me",
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        }
+    }).then((response) => {
+        const responseData = handleResponseData(response, accessToken);
+        res.send(responseData);
+    }).catch((error) => {
+        res.send("error");
+        console.log(error.response.status);
+    })
+})
+
+app.get('/api/user-playlist', async (req, res) => {
+    const queryObject = url.parse(req.url, true).query;
+
+    const playlistId = queryObject.playlist_id;
+
+    const accessToken = await getToken(req);
+
+    axios({
+        method: "GET",
+        url: "https://api.spotify.com/v1/playlists/" + playlistId,
+        headers:{
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        }
+    }).then((response) => {
+        const responseData = handleResponseData(response, accessToken);
+        res.send(responseData);
+    }).catch((error) => {
+        res.send("error");
+        console.log(error.response.status);
+    })
+})
 
 app.listen(process.env.PORT || 4000, () => console.log(`App available on http://localhost:4000`));
