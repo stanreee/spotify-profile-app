@@ -3,12 +3,14 @@ import Body from './Body'
 
 import React from 'react'
 
-function MainPage() {
+import {animated} from 'react-spring'
+
+function MainPage({ style, userData, playlistData }) {
     return (
-        <div className="dashboard">
+        <animated.div style={style} className="dashboard">
             <Header />
-            <Body />
-        </div>
+            <Body userData={userData} playlistData={playlistData} />
+        </animated.div>
     )
 }
 

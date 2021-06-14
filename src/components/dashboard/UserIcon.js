@@ -1,10 +1,10 @@
 import icon from './spotify-512.png';
 
-function UserIcon({ iconLink }) {
+function UserIcon({ iconLink, customClass, redirect }) {
     return (
-        <div className="user-icon">
+        <a target="_blank" href={redirect} className={customClass}>
             <img src={iconLink} alt="" />
-        </div>
+        </a>
     )
 }
 

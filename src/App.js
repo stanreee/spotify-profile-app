@@ -1,41 +1,20 @@
 import Login from './components/Login'
 import MainPage from './components/dashboard/MainPage'
+import Loading from './components/Loading'
+import { useTransition, animated } from 'react-spring';
 
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { retrieveBasicUserData, retrievePlaylistData } from './components/spotify_api'
 import { Redirect } from 'react-router-dom';
 
 function App() {
 
-  // let token = localStorage.getItem("access-token");
-  // let refresh_token = localStorage.getItem("refresh-token");
-
-  // // if local storage does not contain access token, retrieve it from query
-  // if(token === null) {
-  //   let search = window.location.search;
-  //   let params = new URLSearchParams(search);
-
-  //   token = params.get('access_token');
-  //   refresh_token = params.get('refresh_token');
-
-  //   localStorage.setItem("access-token", token);
-  //   localStorage.setItem("refresh-token", refresh_token);
-  //   localStorage.setItem("timestamp", Date.now);
-  // }else{
-  //   if(Date.now() - localStorage.getItem("timestamp") > 3600000) {
-  //     token = null;
-  //     refresh_token = null;
-  //     localStorage.removeItem("access-token");
-  //     localStorage.removeItem("refresh-token");
-  //     localStorage.removeItem("timestamp");
-  //     console.log("access token expired.");
-  //   }else{
-  //     console.log("Hello " + (Date.now() - localStorage.getItem("timestamp")));
-  //   }
-  // }
-
-  // console.log(`token:${token}`);
-  // console.log(`refresh-token:${refresh_token}`);
+  const transition = useTransition(true, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+  });
 
   let search = window.location.search;
   let params = new URLSearchParams(search);
@@ -54,11 +33,28 @@ function App() {
     refresh_token = localStorage.getItem("refresh-token");
   }
   
-  
+  const [userData, setUserData] = useState(null);
+  const [playlistData, setPlaylistData] = useState(null);
+
+    useEffect(() => {
+        async function retrieveData() {
+            const data = await retrieveBasicUserData();
+            const playlists = await retrievePlaylistData();
+            setPlaylistData(playlists);
+            setUserData(data);
+            console.log("retrieved user data:", data)
+            console.log("retrieved playlist data:", playlists);
+        }
+
+        retrieveData();
+    }, []);
+
   return (
     // if token is null, show login page
     // problem here is that anybody could just manually enter queries and be taken to the main page
-    token !== null ? <MainPage /> : <Login />
+    token !== null ? ((userData && playlistData) ? 
+    <MainPage userData={userData} playlistData={playlistData} /> : 
+    <Loading />) : <Login />
   );
 }
 

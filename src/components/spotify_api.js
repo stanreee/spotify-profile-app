@@ -8,8 +8,9 @@ const headers = {
   'Content-Type': 'application/json'
 }
 
-function buildURL(path) {
-  return api_url + path + "?access_token=" + localStorage.getItem("access-token") + "&refresh_token=" + localStorage.getItem("refresh-token") + "&expired=" + isTokenExpired();
+function buildURL(path, firstParam) {
+  const firstChar = firstParam ? "&" : "?"
+  return api_url + path + firstChar + "access_token=" + localStorage.getItem("access-token") + "&refresh_token=" + localStorage.getItem("refresh-token") + "&expired=" + isTokenExpired();
 }
 
 function isTokenExpired() {
@@ -26,7 +27,44 @@ function handleData(data) {
 }
 
 export const retrieveBasicUserData = async () => {
-  const url = buildURL("/api/user-info");
+  const url = buildURL("/api/user-info", false);
+
+  console.log(localStorage.getItem("access-token"));
+
+  var handledData = null;
+
+  const response = await fetch(url)
+  .catch(error => {
+    console.log(error);
+    handleErrors(error);
+  })
+
+  const data = await response.json();
+  handledData = handleData(data);
+
+  return handledData;
+}
+
+export const getTop = async (type, timeRange, limit) => {
+  const url = buildURL("/api/user-top-" + type + "?time_range=" + timeRange + "&limit=" + limit, true);
+  console.log(url);
+
+  var handledData = null;
+
+  const response = await fetch(url)
+  .catch(error => {
+    console.log(error);
+    handleErrors(error);
+  })
+
+  const data = await response.json();
+  handledData = handleData(data);
+
+  return handledData;
+}
+
+export const getRecentlyPlayed = async () => {
+  const url = buildURL("/api/user-recently-played", false);
 
   var handledData = null;
 
@@ -43,7 +81,7 @@ export const retrieveBasicUserData = async () => {
 }
 
 export const retrievePlaylistData = async () => {
-  const url = buildURL("/api/user-playlists");
+  const url = buildURL("/api/user-playlists", false);
 
   var handledData = null;
 

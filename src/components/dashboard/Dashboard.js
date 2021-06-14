@@ -9,8 +9,6 @@ function DashboardSettings({ playlistData }) {
               <Playlists playlistData={playlistData && playlistData}/>
               <h1 className="dashboard-titles">Your Stats</h1>
               <Stats />
-              <h1 className="dashboard-titles">Recommended</h1>
-              <Recommended />
         </div>
     )
 }

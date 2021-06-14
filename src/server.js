@@ -95,7 +95,7 @@ function handleCodeAuthorization(req, res) {
 }
 
 app.get('/login', (req, res) => {
-    const SCOPE = 'user-read-private user-read-email';
+    const SCOPE = 'user-read-private user-read-email user-top-read user-read-recently-played';
     res.redirect('https://accounts.spotify.com/authorize' +
     '?response_type=code' +
     '&client_id=' + process.env.client_id +
@@ -168,6 +168,76 @@ app.get('/api/user-playlist', async (req, res) => {
     }).catch((error) => {
         res.send("error");
         console.log(error.response.status);
+    })
+})
+
+app.get('/api/user-top-artists', async (req, res) => {
+    const queryObject = url.parse(req.url, true).query;
+
+    const timeRange = queryObject.time_range;
+    const limit = queryObject.limit;
+
+    const accessToken = await getToken(req);
+
+    axios({
+        method: "GET",
+        url: "https://api.spotify.com/v1/me/top/artists?time_range=" + timeRange + "&limit=" + limit,
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        }
+    }).then((response) => {
+        const responseData = handleResponseData(response, accessToken);
+        res.send(responseData);
+    }).catch((error) => {
+        res.send("error");
+        console.log(error.response.status);
+        console.log(error.response);
+    })
+})
+
+app.get('/api/user-top-tracks', async (req, res) => {
+    const queryObject = url.parse(req.url, true).query;
+
+    const timeRange = queryObject.time_range;
+    const limit = queryObject.limit;
+
+    const accessToken = await getToken(req);
+
+    axios({
+        method: "GET",
+        url: "https://api.spotify.com/v1/me/top/tracks?time_range=" + timeRange + "&limit=" + limit,
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        }
+    }).then((response) => {
+        const responseData = handleResponseData(response, accessToken);
+        res.send(responseData);
+    }).catch((error) => {
+        res.send("error");
+        console.log(error.response.status);
+        console.log(error.response);
+    })
+})
+
+app.get('/api/user-recently-played', async (req, res) => {
+    const accessToken = await getToken(req);
+
+    axios({
+        method: "GET",
+        url: "https://api.spotify.com/v1/me/player/recently-played",
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        }
+    }).then((response) => {
+        const responseData = handleResponseData(response, accessToken);
+        res.send(responseData);
+    }).catch((error) => {
+        res.send("error");
+        console.log(error.response.status);
+        console.log(error.response);
     })
 })
 
