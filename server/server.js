@@ -37,6 +37,7 @@ if(process.env.NODE_ENV !== 'production') {
 // app.use(cors(corsOptions))
 
 if (process.env.NODE_ENV === 'production') {
+    console.log("production");
     app.use(express.static(path.join(__dirname, 'client/build')));
     app.get('*', function(req, res) {
         res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
