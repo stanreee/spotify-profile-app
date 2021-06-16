@@ -40,10 +40,6 @@ if (process.env.NODE_ENV === 'production') {
     console.log("production");
     app.use(express.static(path.join(__dirname, '../build')));
     app.get('/', function(req, res) {
-        if(req.query.code) {
-            handleCodeAuthorization(req, res);
-            return;
-        }
         res.sendFile(path.join(__dirname, '../build', 'index.html'));
     });
 }
@@ -73,6 +69,14 @@ async function getToken(req) {
     }
     return accessToken;
 }
+
+app.get("/callback", (req, res) => {
+    if(req.query.code) {
+        handleCodeAuthorization(req, res);
+        return;
+    }
+    res.send("no code given");
+})
 
 async function refreshAccessToken(refreshToken) {
     console.log("given refresh token: " + refreshToken);
