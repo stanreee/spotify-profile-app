@@ -1,4 +1,4 @@
-const api_url = "http://localhost:4000"
+const api_url = process.env.NODE_ENV === "production" ? "https://spotify-personalized.herokuapp.com/" : "http://localhost:4000"
 
 function buildURL(path, firstParam) {
   const firstChar = firstParam ? "&" : "?"

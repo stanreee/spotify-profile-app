@@ -40,6 +40,10 @@ if (process.env.NODE_ENV === 'production') {
     console.log("production");
     app.use(express.static(path.join(__dirname, '../build')));
     app.get('/', function(req, res) {
+        if(req.query.code) {
+            handleCodeAuthorization(req, res);
+            return;
+        }
         res.sendFile(path.join(__dirname, '../build', 'index.html'));
     });
 }
@@ -91,6 +95,7 @@ async function refreshAccessToken(refreshToken) {
 }
 
 function handleCodeAuthorization(req, res) {
+    console.log("handling code");
     axios({
         method: 'post',
         url: `https://accounts.spotify.com/api/token?grant_type=authorization_code&code=${req.query.code}&redirect_uri=${process.env.redirect_uri}`,
