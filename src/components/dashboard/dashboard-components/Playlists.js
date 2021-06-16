@@ -1,5 +1,16 @@
 import Playlist from './Playlist'
 import { useEffect, useState } from 'react';
+import spotify from '../spotify-grey.png';
+
+function breakPlaylistData(playlistData) {
+    return {
+        id: playlistData.id,
+        playlistImg: playlistData.images.length > 0 ? playlistData.images[0].url : spotify,
+        name: playlistData.name,
+        link: playlistData.external_urls.spotify,
+        totalTracks: playlistData.tracks.total
+    }
+}
 
 function Playlists({ playlistData }) {
 
@@ -17,7 +28,8 @@ function Playlists({ playlistData }) {
             setMaxPage(Math.ceil(playlistData.items.length / 8));
             var count = 0;
             playlistData.items.forEach((playlist) => {
-                elementsArray.push(<Playlist numOfTracks={playlist.tracks.total} lastPlaylist={count==playlistData.items.length-1 && true} firstPlaylist={count == 0 && true} key={playlist.id} playlistImgSrc={playlist.images[0].url} playlistName={playlist.name} playlistLink={playlist.external_urls.spotify}></Playlist>);
+                const playlistInfo = breakPlaylistData(playlist);
+                elementsArray.push(<Playlist numOfTracks={playlistInfo.totalTracks} lastPlaylist={count===playlistData.items.length-1 && true} firstPlaylist={count===0 && true} key={playlistInfo.id} playlistImgSrc={playlistInfo.playlistImg} playlistName={playlistInfo.name} playlistLink={playlistInfo.link}></Playlist>);
                 if(count < 8) {
                     visibleArray.push(elementsArray[count]);
                 }
@@ -54,11 +66,6 @@ function Playlists({ playlistData }) {
         setVisible([visibleArray]);
     }
 
-    if(playlistData) {
-        console.log("hello", elements);
-        console.log(playlistData.items);
-    }
-
     return (
         <div className="playlists-div">
             <div className="outer-playlists">
@@ -67,7 +74,7 @@ function Playlists({ playlistData }) {
             {page !== maxPage ? 
             <button className="show-more-playlists" onClick={showMore}>Show More</button> 
             : 
-            maxPage != 1 && <button className="show-more-playlists" onClick={showLess}>Show Less</button>}
+            maxPage !== 1 && <button className="show-more-playlists" onClick={showLess}>Show Less</button>}
         </div>
     )
 }

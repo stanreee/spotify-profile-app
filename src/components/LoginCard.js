@@ -1,9 +1,3 @@
-import logo from './spotify-512.png';
-
-const test = () =>  {
-    console.log(process.env.redirect_uri);
-}
-
 function LoginCard() {
     return (
         <div className="login-card">

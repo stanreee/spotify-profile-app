@@ -1,12 +1,4 @@
-const token = localStorage.getItem("access-token");
-const refreshToken = localStorage.getItem("refresh-token");
-
 const api_url = "http://localhost:4000"
-
-const headers = {
-  'Authorization': `Bearer ${token}`,
-  'Content-Type': 'application/json'
-}
 
 function buildURL(path, firstParam) {
   const firstChar = firstParam ? "&" : "?"
@@ -29,8 +21,6 @@ function handleData(data) {
 export const retrieveBasicUserData = async () => {
   const url = buildURL("/api/user-info", false);
 
-  console.log(localStorage.getItem("access-token"));
-
   var handledData = null;
 
   const response = await fetch(url)
@@ -47,7 +37,6 @@ export const retrieveBasicUserData = async () => {
 
 export const getTop = async (type, timeRange, limit) => {
   const url = buildURL("/api/user-top-" + type + "?time_range=" + timeRange + "&limit=" + limit, true);
-  console.log(url);
 
   var handledData = null;
 
@@ -124,5 +113,11 @@ function handleErrors(error) {
   switch(error.status){
     case 401:
       console.log("Token timed out, use refresh token or log in again.");
+      break;
+    case 503:
+      console.log("Spotify web servers are down. Try again later.");
+      break;
+    default:
+      console.log("no error");
   }
 }

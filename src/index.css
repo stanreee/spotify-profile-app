@@ -53,7 +53,7 @@ body::-webkit-scrollbar-thumb{
   height: 100%;
   background-color: #191414;
   width: 100%;
-  flex: 2;
+  flex: 3;
   position: relative;
 }
 
@@ -78,10 +78,6 @@ body::-webkit-scrollbar-thumb{
   place-items: center;
   background-color: rgba(0, 0, 0, 0);
   top: 2%;
-}
-
-.user-icon img:hover{
-  filter: brightness(50%);
 }
 
 .user-icon img{
@@ -124,7 +120,7 @@ body::-webkit-scrollbar-thumb{
 .dashboard-titles {
   color: white;
   font-weight: white;
-  font-size: 48px;
+  font-size: 36px;
   margin-left: 10%;
 }
 
@@ -166,7 +162,6 @@ body::-webkit-scrollbar-thumb{
   background-color: #1f1b1b;
   width: 300px;
   height: 370px;
-  border-radius: 10px;
   /* margin-left: 10px;
   margin-right: 10px; */
   cursor: default;
@@ -234,6 +229,35 @@ body::-webkit-scrollbar-thumb{
   cursor: pointer;
 }
 
+.user-stats-optionbar {
+  margin-top: 20px;
+  width: 80%;
+  height: 50px;
+  background-color: #1f1b1b;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.user-stats-optionbar-item {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  transition: all ease 0.5s;
+  cursor: pointer;
+}
+
+.user-stats-optionbar-item:hover {
+  background-color: #3a3737;
+}
+
+.user-stats-optionbar-item h1{
+  color: white;
+  font-size: 24px;
+}
+
 .stats-div{
   position: relative;
   width: 100vw;
@@ -241,7 +265,7 @@ body::-webkit-scrollbar-thumb{
   place-items: center;
 }
 
-.user-stats-general-statistics {
+.user-stats-general-statistics, .user-stats-top-artists  {
   display: flex;
   width: 80vw;
   align-items: center;
@@ -284,6 +308,7 @@ body::-webkit-scrollbar-thumb{
 }
 
 .icon-artist {
+  display: inline;
   margin-bottom: 15px;
 }
 
@@ -304,10 +329,11 @@ body::-webkit-scrollbar-thumb{
 .top-track h1 {
   font-size: 26px;
   margin-bottom: 5px;
+  text-align: center;
 }
 
 .top-track h2 {
-  margin-bottom: 75px;
+  margin-bottom: 25px;
 }
 
 .user-stats-dropdown-menu{
@@ -353,6 +379,11 @@ body::-webkit-scrollbar-thumb{
   padding-top: 10px;
   padding-bottom: 10px;
   margin-bottom: 10px;
+  transition: all ease 0.5s;
+}
+
+.track:hover {
+  background-color: #353333;
 }
 
 .track img {
@@ -370,6 +401,78 @@ body::-webkit-scrollbar-thumb{
 .track h2{
   font-size: 18px;
   color: rgb(194, 194, 194);
+}
+
+.track a {
+  color: white;
+  text-decoration: none;
+  color: inherit;
+}
+
+.track a:hover {
+  text-decoration: underline;
+}
+
+.play-btn-div {
+  position: relative;
+  top: 80px;
+}
+
+.play-btn {
+  position: relative;
+  bottom: -30px;
+  left: -20px;
+}
+
+.play-btn img{
+  height: 35px;
+  width: 35px;
+}
+
+.top-artists{
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+}
+
+.artist-icon h1 {
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  padding-top: 8px;
+}
+
+.artist-icon {
+  color: white;
+  margin-bottom: 20px;
+}
+
+.top {
+  margin: 5px;
+  display: grid;
+  place-items: center;
+}
+
+/*
+Footer
+*/
+
+.footer {
+  margin-top: 70px;
+  position: relative;
+  height: 70px;
+  width: 100%;
+}
+
+.github-icon img {
+  height: 50px;
+  width: 50px;
+  transition: all ease 0.5s;
+}
+
+.github-icon img:hover{
+  height: 55px;
+  width: 55px;
 }
 
 /*

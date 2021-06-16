@@ -1,20 +1,11 @@
 import Login from './components/Login'
 import MainPage from './components/dashboard/MainPage'
 import Loading from './components/Loading'
-import { useTransition, animated } from 'react-spring';
 
-import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { useEffect, useState } from 'react';
 import { retrieveBasicUserData, retrievePlaylistData } from './components/spotify_api'
-import { Redirect } from 'react-router-dom';
 
 function App() {
-
-  const transition = useTransition(true, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-  });
 
   let search = window.location.search;
   let params = new URLSearchParams(search);

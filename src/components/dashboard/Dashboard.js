@@ -1,6 +1,6 @@
 import Playlists from './dashboard-components/Playlists';
 import Stats from './dashboard-components/Stats';
-import Recommended from './dashboard-components/Recommended';
+import Footer from './Footer';
 
 function DashboardSettings({ playlistData }) {
     return (
@@ -9,6 +9,7 @@ function DashboardSettings({ playlistData }) {
               <Playlists playlistData={playlistData && playlistData}/>
               <h1 className="dashboard-titles">Your Stats</h1>
               <Stats />
+              <Footer></Footer>
         </div>
     )
 }
