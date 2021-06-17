@@ -1,14 +1,23 @@
 const api_url = process.env.NODE_ENV === "production" ? "https://spotify-personalized.herokuapp.com" : "http://localhost:4000"
 
+/*
+Build URL for frontend to request data from backend.
+ */
 function buildURL(path, firstParam) {
   const firstChar = firstParam ? "&" : "?"
   return api_url + path + firstChar + "access_token=" + localStorage.getItem("access-token") + "&refresh_token=" + localStorage.getItem("refresh-token") + "&expired=" + isTokenExpired();
 }
 
+/*
+Checks if the token is expired given the timestamp stored in memory.
+*/
 function isTokenExpired() {
   return Date.now() - localStorage.getItem("timestamp") > 360000;
 }
 
+/*
+Handles the data received from the backend, refreshes the access token if the token has expired.
+*/
 function handleData(data) {
   var handledData = data.data;
   if(isTokenExpired()) {
@@ -20,8 +29,6 @@ function handleData(data) {
 
 export const retrieveBasicUserData = async () => {
   const url = buildURL("/api/user-info", false);
-
-  console.log(url);
 
   var handledData = null;
 
@@ -120,6 +127,6 @@ function handleErrors(error) {
       console.log("Spotify web servers are down. Try again later.");
       break;
     default:
-      console.log("no error");
+      console.log("Error: " + error.status);
   }
 }

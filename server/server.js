@@ -1,40 +1,16 @@
-const { readFile } = require('fs');
-
 const express = require('express');
 
 const app = express();
 
 const path = require('path');
 
-const https = require('https');
-
 const axios = require('axios');
 
 const url = require('url');
 
-const { isBuffer } = require('util');
-const { query } = require('express');
-
-let headers = {};
-
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
-
-// const whitelist = ['http://localhost:3000', 'http://localhost:4000', 'https://spotify-personalized.herokuapp.com/']
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     console.log("** Origin of request " + origin)
-//     if (whitelist.indexOf(origin) !== -1 || !origin) {
-//       console.log("Origin acceptable")
-//       callback(null, true)
-//     } else {
-//       console.log("Origin rejected")
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//   }
-// }
-// app.use(cors(corsOptions))
 
 if (process.env.NODE_ENV === 'production') {
     console.log("production");
@@ -93,7 +69,8 @@ async function refreshAccessToken(refreshToken) {
         console.log("refreshed access token. receieved data: " + accessTokenRefreshed);
         return accessTokenRefreshed;
     }).catch(error => {
-        console.log(error.response.status);
+        console.log("Error refreshing access token, " + error.response.status);
+        console.log(error.response);
     })
     return accessTokenRefreshed;
 }

@@ -17,8 +17,6 @@ function App() {
     localStorage.setItem("access-token", token);
     localStorage.setItem("refresh-token", refresh_token);
     localStorage.setItem("timestamp", Date.now());
-    
-    console.log("token: " + token);
   }else{
     token = localStorage.getItem("access-token");
     refresh_token = localStorage.getItem("refresh-token");
@@ -37,12 +35,12 @@ function App() {
             console.log("retrieved playlist data:", playlists);
         }
 
-        retrieveData();
+        if(token) {
+          retrieveData();
+        }
     }, []);
 
   return (
-    // if token is null, show login page
-    // problem here is that anybody could just manually enter queries and be taken to the main page
     token !== null ? ((userData && playlistData) ? 
     <MainPage userData={userData} playlistData={playlistData} /> : 
     <Loading />) : <Login />
