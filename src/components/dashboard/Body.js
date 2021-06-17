@@ -1,12 +1,13 @@
 import React from 'react'
 import Dashboard from './Dashboard';
 import UserIcon from './UserIcon';
+import icon from './GitHub-Mark.png';
 
 function Body({ userData, playlistData }) {
 
     return (
         <div className="main-body">
-            <UserIcon hoverBrightness="50%" redirect={userData && userData.external_urls.spotify} iconLink={userData && userData.images[0].url} customClass={"user-icon"} />
+            <UserIcon hoverBrightness="50%" redirect={userData && userData.external_urls.spotify} iconLink={userData && (userData.images[0].url ? userData.images[0].url : icon)} customClass={"user-icon"} />
             <div className="user-info-div">
                 <div className="user-info">
                     <h1>{userData && userData.display_name}</h1>

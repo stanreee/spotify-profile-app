@@ -382,7 +382,7 @@ function GeneralStatistics() {
             )}
             {transition((style, item) => 
                 item ? <animated.div style={style} className="general-stat top-artist">
-                    <UserIcon redirect={artistData && artistData.items[0].external_urls.spotify} iconLink={artistData && artistData.items[0].images[0].url} customClass="user-icon icon-artist"></UserIcon>
+                    <UserIcon redirect={artistData && artistData.items[0].external_urls.spotify} iconLink={artistData && breakArtistData(artistData.items[0]).imgUrl} customClass="user-icon icon-artist"></UserIcon>
                     <h1>{artistData && artistData.items[0].name}</h1>
                     <h2>{getArtistText()}</h2>
                 </animated.div> : null
