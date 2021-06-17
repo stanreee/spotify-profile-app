@@ -1,7 +1,7 @@
 import React from 'react'
 import Dashboard from './Dashboard';
 import UserIcon from './UserIcon';
-import icon from './GitHub-Mark.png';
+import icon from './spotify-grey.png';
 
 function Body({ userData, playlistData }) {
 
