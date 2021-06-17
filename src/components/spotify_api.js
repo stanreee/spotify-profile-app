@@ -1,4 +1,4 @@
-const api_url = process.env.NODE_ENV === "production" ? "https://spotify-personalized.herokuapp.com" : "http://localhost:4000"
+const api_url = process.env.NODE_ENV === "production" ? "https://personalized-spotify.herokuapp.com" : "http://localhost:4000"
 
 /*
 Build URL for frontend to request data from backend.

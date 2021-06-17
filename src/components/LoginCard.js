@@ -1,4 +1,4 @@
-const redirect = process.env.NODE_ENV === "production" ? "https://spotify-personalized.herokuapp.com/login" : "http://localhost:4000/login"
+const redirect = process.env.NODE_ENV === "production" ? "https://personalized-spotify.herokuapp.com/login" : "http://localhost:4000/login"
 
 function LoginCard() {
     return (
