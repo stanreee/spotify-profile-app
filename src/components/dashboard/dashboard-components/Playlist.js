@@ -11,13 +11,13 @@ function Playlist({ playlistImgSrc, playlistName, playlistLink, numOfTracks, fir
     })
 
     return (
-        firstAnimate((style, item) => item ? <animated.div style={style} className="playlist-card" >
+        firstAnimate((style, item) => item ? <animated.a target="_blank" href={playlistLink} style={style} className="playlist-card" >
             <img className="playlist-img" src={playlistImgSrc} alt="" />
             <div className="playlist-info">
                 <h1 className="playlist-title">{playlistName}</h1>
                 <h1 className="playlist-tracks">{numOfTracks} songs</h1>
             </div>
-        </animated.div> : null)
+        </animated.a> : null)
         
     )
 }

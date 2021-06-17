@@ -148,7 +148,6 @@ body::-webkit-scrollbar-thumb{
 }
 
 .playlists-div a{
-  cursor: default;
   text-decoration: none;
   width: 300px;
 }
@@ -164,7 +163,6 @@ body::-webkit-scrollbar-thumb{
   height: 370px;
   /* margin-left: 10px;
   margin-right: 10px; */
-  cursor: default;
   transition: all 0.5s ease;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
