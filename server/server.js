@@ -139,7 +139,7 @@ app.get('/api/user-playlists', async (req, res) => {
     })
 })
 
-app.get('/api/user-info', async (req, res) => {
+app.get('/api/user-info', async (req, res, next) => {
     const accessToken = await getToken(req);
 
     axios({
@@ -155,6 +155,7 @@ app.get('/api/user-info', async (req, res) => {
     }).catch((error) => {
         res.send("error");
         console.log(error.response.status);
+        console.log(error.response);
     })
 })
 

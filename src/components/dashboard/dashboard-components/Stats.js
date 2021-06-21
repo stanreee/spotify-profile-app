@@ -4,7 +4,7 @@ import { getRecentlyPlayed, getTop } from '../../spotify_api'
 import UserIcon from '../UserIcon'
 import Loading from '../../Loading'
 import playbtn from '../play-btn.png'
-import spotify from '../spotify-grey.png'
+import spotify from '../no-icon.png'
 
 function breakArtistData(artist) {
     return {
@@ -230,6 +230,8 @@ function GeneralStatistics() {
             const trackData = await getTop("tracks", timeRange, 25);
 
             const artists = data.items;
+
+            if(artists.length == 0) return;
 
             var map = {};
             var maxCount = 1;
