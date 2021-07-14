@@ -12,7 +12,7 @@ function buildURL(path, firstParam) {
 Checks if the token is expired given the timestamp stored in memory.
 */
 function isTokenExpired() {
-  return Date.now() - localStorage.getItem("timestamp") > 360000;
+  return Date.now() - localStorage.getItem("timestamp") > 3600000;
 }
 
 /*
